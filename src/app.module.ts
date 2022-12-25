@@ -8,20 +8,25 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
-
+import { DateTimeResolver } from 'graphql-scalars'
 @Module({
   imports: [GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
-    playground: false,
-    plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    playground: true,
     typePaths: ['./**/*.graphql'],
     definitions: {
       path: join(process.cwd(), 'src/types/graphql.ts'),
       outputAs: 'class'
+    },
+    resolvers: {
+      DateTime: DateTimeResolver
+    },
+    context: ({ req, res }) => {
+      return { req, res }
     }
   }),
   PrismaModule,
-  UsersModule
+  UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

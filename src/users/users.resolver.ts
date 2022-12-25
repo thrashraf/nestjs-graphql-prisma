@@ -1,14 +1,24 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { CreateUserInput, UpdateUserInput } from 'src/types/graphql';
-
+import { ConfirmUserInput, CreateUserInput, LoginInput, UpdateUserInput } from 'src/types/graphql';
+import Ctx from 'src/types/context.type';
 @Resolver('User')
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation('createUser')
-  create(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+  register(@Args('createUserInput') createUserInput: CreateUserInput) {
+    return this.usersService.createUser(createUserInput);
+  }
+
+  @Mutation('confirmUserInput')
+  confirmUser(@Args('confirmUserInput') confirmUserInput: ConfirmUserInput) {
+    return this.usersService.confirmUser(confirmUserInput);
+  }
+
+  @Query('loginInput')
+  loginInput(@Args('loginInput') loginInput: LoginInput, @Context() context: Ctx) {
+    return this.usersService.login(loginInput, context);
   }
 
   @Query('users')
@@ -17,8 +27,8 @@ export class UsersResolver {
   }
 
   @Query('user')
-  findOne(@Args('id') id: number) {
-    return this.usersService.findOne(id);
+  findOne(@Args('email') email: string) {
+    return this.usersService.findOne(email);
   }
 
   @Mutation('updateUser')
