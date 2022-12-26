@@ -8,7 +8,10 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
-import { DateTimeResolver } from 'graphql-scalars'
+import { DateTimeResolver } from 'graphql-scalars';
+
+import { get, set } from 'lodash';
+import {decodeJwt} from './utils/jwt.utils';
 @Module({
   imports: [GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
@@ -22,6 +25,13 @@ import { DateTimeResolver } from 'graphql-scalars'
       DateTime: DateTimeResolver
     },
     context: ({ req, res }) => {
+      //? get user cookie from request
+      const token = get(req, 'cookies.token');
+      //? verify token
+      const user = token ? decodeJwt(token) : null;
+      //? attach the user to request
+      if (user) set(req, 'user', user);
+
       return { req, res }
     }
   }),

@@ -21,6 +21,16 @@ export class UsersResolver {
     return this.usersService.login(loginInput, context);
   }
 
+  @Query('getSelfUser')
+  getSelfUser(@Context() context: Ctx) {
+    return context.req.user
+  }
+
+  @Query('logout')
+  logout(@Context() context: Ctx) {
+    return this.usersService.logout(context);
+  }
+
   @Query('users')
   findAll() {
     return this.usersService.findAll();

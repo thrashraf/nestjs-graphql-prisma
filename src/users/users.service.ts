@@ -49,14 +49,19 @@ export class UsersService {
       throw new UnauthorizedException();
     }
 
-    const jwt = signJwt(omit(user, ['password', 'active'])); 
+    //? exclude password, active and confirmationToken
+    const jwt = signJwt(omit(user, ['password', 'active', 'confirmationToken'])); 
     
     console.log(jwt)
 
     //? set the jwt in the cookie
     context.res.cookie('token', jwt, cookieOptions);
-
     return user;
+  }
+
+  logout(context: Ctx) {
+    context.res.cookie('token', '', { ...cookieOptions, maxAge: 0});
+    return null;
   }
 
   findAll() {

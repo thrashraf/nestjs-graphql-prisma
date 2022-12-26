@@ -38,10 +38,10 @@ export class User {
     id: number;
     name: string;
     email: string;
-    password: string;
+    password?: Nullable<string>;
     createdAt: DateTime;
-    confirmationToken: string;
-    active: boolean;
+    confirmationToken?: Nullable<string>;
+    active?: Nullable<boolean>;
 }
 
 export abstract class IQuery {
@@ -50,6 +50,10 @@ export abstract class IQuery {
     abstract user(id: number): Nullable<User> | Promise<Nullable<User>>;
 
     abstract loginInput(loginInput?: Nullable<LoginInput>): User | Promise<User>;
+
+    abstract getSelfUser(): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract logout(): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export abstract class IMutation {

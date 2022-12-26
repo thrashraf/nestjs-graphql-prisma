@@ -5,9 +5,8 @@ export function signJwt(payload) {
 }
 
 export function decodeJwt(token: string) {
-    
     if (!token) return null;
-
+    
     try {
         return jwt.verify(token, process.env.JWT_PUBLIC_KEY);
     } catch (error) {

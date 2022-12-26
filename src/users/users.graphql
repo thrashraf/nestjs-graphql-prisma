@@ -4,10 +4,10 @@ type User {
   id: Int!
   name: String!
   email: String!
-  password: String!
+  password: String
   createdAt: DateTime!
-  confirmationToken: String!
-  active: Boolean!
+  confirmationToken: String
+  active: Boolean
 }
 
 input CreateUserInput {
@@ -40,6 +40,8 @@ type Query {
   users: [User]!
   user(id: Int!): User
   loginInput(loginInput: LoginInput): User!
+  getSelfUser: User
+  logout: User
 }
 
 type Mutation {
