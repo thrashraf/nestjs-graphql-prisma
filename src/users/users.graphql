@@ -1,24 +1,53 @@
+scalar DateTime
+
 type User {
   id: Int!
   name: String!
+  email: String!
+  password: String
+  createdAt: DateTime!
+  confirmationToken: String
+  active: Boolean
 }
 
 input CreateUserInput {
+  id: Int
   name: String!
+  email: String!
+  password: String!
 }
 
 input UpdateUserInput {
   id: Int!
-  name: String!
+  name: String
+  email: String
+  password: String
+  confirmationToken: String
+  active: Boolean
+}
+
+input ConfirmUserInput {
+  email: String!
+  confirmationToken: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type Query {
   users: [User]!
   user(id: Int!): User
+  loginInput(loginInput: LoginInput): User!
+  getSelfUser: User
+  logout: User
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  confirmUserInput(confirmUserInput: ConfirmUserInput!): User!
+  loginInput(loginInput: LoginInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User
 }
